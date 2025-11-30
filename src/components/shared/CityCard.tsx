@@ -121,35 +121,33 @@ function CityCard({ city }: CityCardProps) {
               </span>
               <span className="text-sm text-muted-foreground">/월</span>
             </div>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={handleLike}
-                className="flex items-center gap-1 transition-colors hover:opacity-75 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md p-1"
-                aria-label={liked ? `${city.name} 좋아요 취소` : `${city.name} 좋아요`}
-                aria-pressed={liked}
-              >
-                <ThumbsUp
-                  className={`w-5 h-5 ${liked ? 'fill-blue-500 text-blue-500' : 'text-gray-400'}`}
-                />
-                <span className={`text-sm font-medium ${liked ? 'text-blue-500' : 'text-gray-600'}`}>
-                  {likeCount}
-                </span>
-              </button>
+            <button
+              onClick={handleLike}
+              className="flex items-center gap-1 transition-colors hover:opacity-75 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md p-1"
+              aria-label={liked ? `${city.name} 좋아요 취소` : `${city.name} 좋아요`}
+              aria-pressed={liked}
+            >
+              <ThumbsUp
+                className={`w-5 h-5 ${liked ? 'fill-blue-500 text-blue-500' : 'text-gray-400'}`}
+              />
+              <span className={`text-sm font-medium ${liked ? 'text-blue-500' : 'text-gray-600'}`}>
+                {likeCount}
+              </span>
+            </button>
 
-              <button
-                onClick={handleDislike}
-                className="flex items-center gap-1 transition-colors hover:opacity-75 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-md p-1"
-                aria-label={disliked ? `${city.name} 싫어요 취소` : `${city.name} 싫어요`}
-                aria-pressed={disliked}
-              >
-                <ThumbsDown
-                  className={`w-5 h-5 ${disliked ? 'fill-red-500 text-red-500' : 'text-gray-400'}`}
-                />
-                <span className={`text-sm font-medium ${disliked ? 'text-red-500' : 'text-gray-600'}`}>
-                  {dislikeCount}
-                </span>
-              </button>
-            </div>
+            <button
+              onClick={handleDislike}
+              className="flex items-center gap-1 transition-colors hover:opacity-75 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-md p-1"
+              aria-label={disliked ? `${city.name} 싫어요 취소` : `${city.name} 싫어요`}
+              aria-pressed={disliked}
+            >
+              <span className={`text-sm font-medium ${disliked ? 'text-red-500' : 'text-gray-600'}`}>
+                {dislikeCount}
+              </span>
+              <ThumbsDown
+                className={`w-5 h-5 ${disliked ? 'fill-red-500 text-red-500' : 'text-gray-400'}`}
+              />
+            </button>
           </div>
 
           <div className="grid grid-cols-2 gap-2 text-sm">
