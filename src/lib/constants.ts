@@ -44,3 +44,33 @@ export const EVENT_TYPES = {
   networking: '네트워킹',
   social: '소셜',
 } as const;
+
+export const BUDGET_OPTIONS = [
+  '100만원 미만',
+  '100~200만원',
+  '200만원 이상',
+] as const;
+
+export const REGION_CATEGORIES = [
+  '전체',
+  '수도권',
+  '경상도',
+  '전라도',
+  '강원도',
+  '제주도',
+  '충청도',
+] as const;
+
+export const ENVIRONMENT_OPTIONS = [
+  '자연친화',
+  '도심선호',
+  '카페작업',
+  '코워킹 필수',
+] as const;
+
+export const SEASON_OPTIONS = [
+  '봄',
+  '여름',
+  '가을',
+  '겨울',
+] as const;

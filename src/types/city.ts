@@ -13,8 +13,13 @@ export interface City {
     total: number; // Monthly in KRW
   };
   highlights: string[];
-  rating: number; // 1-5
   reviewCount: number;
+  likes: number;
+  dislikes: number;
+  budget: '100만원 미만' | '100~200만원' | '200만원 이상';
+  region_category: '전체' | '수도권' | '경상도' | '전라도' | '강원도' | '제주도' | '충청도';
+  environment: ('자연친화' | '도심선호' | '카페작업' | '코워킹 필수')[];
+  best_season: ('봄' | '여름' | '가을' | '겨울')[];
   population: number;
   internetSpeed: number; // Mbps
   coworkingSpaces: number;

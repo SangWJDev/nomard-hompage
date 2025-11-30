@@ -1,5 +1,27 @@
 import { City } from '@/types';
 
+// Helper function to auto-classify budget based on total cost
+const getBudgetCategory = (total: number): City['budget'] => {
+  if (total < 1000000) return '100만원 미만';
+  if (total < 2000000) return '100~200만원';
+  return '200만원 이상';
+};
+
+// Helper function to auto-map region to region_category
+const getRegionCategory = (region: City['region']): City['region_category'] => {
+  const regionMap: Record<City['region'], City['region_category']> = {
+    seoul: '수도권',
+    gyeonggi: '수도권',
+    busan: '경상도',
+    gyeongsang: '경상도',
+    jeolla: '전라도',
+    gangwon: '강원도',
+    jeju: '제주도',
+    chungcheong: '충청도',
+  };
+  return regionMap[region];
+};
+
 // 6 Detailed Cities
 const detailedCities: City[] = [
   {
@@ -23,8 +45,13 @@ const detailedCities: City[] = [
       '빠른 기가 인터넷',
       '활기찬 비즈니스 문화',
     ],
-    rating: 4.5,
     reviewCount: 234,
+    likes: 189,
+    dislikes: 45,
+    budget: getBudgetCategory(1900000),
+    region_category: getRegionCategory('seoul'),
+    environment: ['도심선호', '카페작업', '코워킹 필수'],
+    best_season: ['봄', '가을'],
     population: 561052,
     internetSpeed: 1000,
     coworkingSpaces: 45,
@@ -53,8 +80,13 @@ const detailedCities: City[] = [
       '신선한 해산물',
       '여유로운 분위기',
     ],
-    rating: 4.7,
     reviewCount: 189,
+    likes: 156,
+    dislikes: 33,
+    budget: getBudgetCategory(1380000),
+    region_category: getRegionCategory('busan'),
+    environment: ['자연친화', '카페작업'],
+    best_season: ['봄', '여름', '가을'],
     population: 423000,
     internetSpeed: 500,
     coworkingSpaces: 18,
@@ -83,8 +115,13 @@ const detailedCities: City[] = [
       '신선한 로컬 푸드',
       '평화로운 분위기',
     ],
-    rating: 4.8,
     reviewCount: 312,
+    likes: 278,
+    dislikes: 34,
+    budget: getBudgetCategory(1600000),
+    region_category: getRegionCategory('jeju'),
+    environment: ['자연친화', '카페작업'],
+    best_season: ['봄', '여름', '가을'],
     population: 435413,
     internetSpeed: 500,
     coworkingSpaces: 12,
@@ -113,8 +150,13 @@ const detailedCities: City[] = [
       '문화 체험 기회 많음',
       '차분한 분위기',
     ],
-    rating: 4.4,
     reviewCount: 98,
+    likes: 67,
+    dislikes: 31,
+    budget: getBudgetCategory(1120000),
+    region_category: getRegionCategory('jeolla'),
+    environment: ['도심선호', '카페작업'],
+    best_season: ['봄', '가을'],
     population: 658172,
     internetSpeed: 500,
     coworkingSpaces: 8,
@@ -143,8 +185,13 @@ const detailedCities: City[] = [
       '평화로운 자연환경',
       '적당한 생활비',
     ],
-    rating: 4.6,
     reviewCount: 145,
+    likes: 112,
+    dislikes: 33,
+    budget: getBudgetCategory(1270000),
+    region_category: getRegionCategory('gangwon'),
+    environment: ['자연친화', '카페작업'],
+    best_season: ['봄', '여름', '가을'],
     population: 213658,
     internetSpeed: 500,
     coworkingSpaces: 6,
@@ -173,8 +220,13 @@ const detailedCities: City[] = [
       '지하철 2호선 접근성',
       '젊은 커뮤니티',
     ],
-    rating: 4.5,
     reviewCount: 187,
+    likes: 145,
+    dislikes: 42,
+    budget: getBudgetCategory(1650000),
+    region_category: getRegionCategory('seoul'),
+    environment: ['도심선호', '카페작업', '코워킹 필수'],
+    best_season: ['봄', '가을'],
     population: 385000,
     internetSpeed: 1000,
     coworkingSpaces: 32,
@@ -184,31 +236,58 @@ const detailedCities: City[] = [
   },
 ];
 
+// Helper function to generate deterministic values from string id
+const hashCode = (str: string): number => {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  return Math.abs(hash);
+};
+
 // Template function for remaining cities
-const createTemplateCity = (id: string, name: string, nameEn: string, region: City['region'], emoji: string): City => ({
-  id,
-  name,
-  nameEn,
-  region,
-  description: `${name}은(는) ${region === 'seoul' ? '서울' : region === 'busan' ? '부산' : region === 'jeju' ? '제주' : region === 'gyeonggi' ? '경기' : region === 'gangwon' ? '강원' : region === 'chungcheong' ? '충청' : region === 'jeolla' ? '전라' : '경상'}의 중요한 도시입니다. 디지털 노마드를 위한 기본 인프라를 갖추고 있습니다.`,
-  image: `https://source.unsplash.com/800x600/?korea,city&sig=${id}`,
-  emoji,
-  costOfLiving: {
-    accommodation: 700000,
-    food: 450000,
-    transportation: 80000,
-    total: 1230000,
-  },
-  highlights: ['기본 인프라 완비', '적절한 생활비', '고속 인터넷 지원'],
-  rating: 4.0,
-  reviewCount: Math.floor(Math.random() * 20) + 10,
-  population: Math.floor(Math.random() * 500000) + 100000,
-  internetSpeed: 500,
-  coworkingSpaces: Math.floor(Math.random() * 5) + 3,
-  cafesWithWifi: Math.floor(Math.random() * 50) + 30,
-  tags: ['도시', '고속 인터넷'],
-  featured: false,
-});
+const createTemplateCity = (
+  id: string,
+  name: string,
+  nameEn: string,
+  region: City['region'],
+  emoji: string
+): City => {
+  const total = 1230000;
+  const hash = hashCode(id);
+
+  return {
+    id,
+    name,
+    nameEn,
+    region,
+    description: `${name}은(는) ${region === 'seoul' ? '서울' : region === 'busan' ? '부산' : region === 'jeju' ? '제주' : region === 'gyeonggi' ? '경기' : region === 'gangwon' ? '강원' : region === 'chungcheong' ? '충청' : region === 'jeolla' ? '전라' : '경상'}의 중요한 도시입니다. 디지털 노마드를 위한 기본 인프라를 갖추고 있습니다.`,
+    image: `https://source.unsplash.com/800x600/?korea,city&sig=${id}`,
+    emoji,
+    costOfLiving: {
+      accommodation: 700000,
+      food: 450000,
+      transportation: 80000,
+      total,
+    },
+    highlights: ['기본 인프라 완비', '적절한 생활비', '고속 인터넷 지원'],
+    reviewCount: (hash % 20) + 10,
+    likes: (hash % 50) + 20,
+    dislikes: (hash % 15) + 5,
+    budget: getBudgetCategory(total),
+    region_category: getRegionCategory(region),
+    environment: ['도심선호', '카페작업'],
+    best_season: ['봄', '가을'],
+    population: (hash % 500000) + 100000,
+    internetSpeed: 500,
+    coworkingSpaces: (hash % 5) + 3,
+    cafesWithWifi: (hash % 50) + 30,
+    tags: ['도시', '고속 인터넷'],
+    featured: false,
+  };
+};
 
 // 43 Template Cities
 const templateCities: City[] = [
@@ -300,6 +379,11 @@ export const getCitiesByRegion = (region: string): City[] => {
 
 export const getTopRatedCities = (limit: number = 10): City[] => {
   return [...mockCities]
-    .sort((a, b) => b.rating - a.rating)
+    .sort((a, b) => b.likes - a.likes)
     .slice(0, limit);
+};
+
+export const getCitiesByLikes = (limit?: number): City[] => {
+  const sorted = [...mockCities].sort((a, b) => b.likes - a.likes);
+  return limit ? sorted.slice(0, limit) : sorted;
 };

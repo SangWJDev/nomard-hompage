@@ -1,34 +1,53 @@
-import { getTopRatedCities } from '@/data';
+'use client';
+
+import { useState, useMemo } from 'react';
+import { getCitiesByLikes } from '@/data';
+import { filterCities } from '@/lib/filters';
+import FilterPanel, { FilterState } from '@/components/shared/FilterPanel';
 import CityCard from '@/components/shared/CityCard';
-import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
 
 export default function FeaturedCities() {
-  const cities = getTopRatedCities(10);
+  const [filters, setFilters] = useState<FilterState>({
+    budget: null,
+    regions: [],
+    environments: [],
+    seasons: [],
+  });
+
+  const allCities = useMemo(() => getCitiesByLikes(), []);
+  const filteredCities = useMemo(() => filterCities(allCities, filters), [allCities, filters]);
 
   return (
     <section className="section">
       <div className="container-wide">
-        <div className="text-center mb-12">
+        {/* 제목 변경 */}
+        <div className="text-center mb-8">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            🔥 지금 인기있는 도시 TOP 10
+            도시 리스트
           </h2>
           <p className="text-lg text-muted-foreground">
-            다른 노마드들이 가장 많이 선택한 도시들을 확인해보세요
+            좋아요가 많은 순서대로 정렬
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
-          {cities.map((city) => (
-            <CityCard key={city.id} city={city} />
-          ))}
+        {/* 필터 패널 통합 */}
+        <div className="mb-12 bg-gradient-to-br from-primary/5 to-primary/10 p-8 rounded-lg">
+          <FilterPanel onFilterChange={setFilters} />
         </div>
 
-        <div className="text-center">
-          <Button size="lg" variant="outline">
-            전체 도시 보기 (49개)
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
+        {/* 필터링된 도시 목록 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredCities.length > 0 ? (
+            filteredCities.map((city) => (
+              <CityCard key={city.id} city={city} />
+            ))
+          ) : (
+            <div className="col-span-full text-center py-12">
+              <p className="text-lg text-muted-foreground">
+                조건에 맞는 도시가 없습니다.
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </section>

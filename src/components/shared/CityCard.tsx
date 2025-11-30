@@ -1,15 +1,51 @@
+'use client';
+
+import { useState, memo } from 'react';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { City } from '@/types';
 import { formatCurrency } from '@/lib/utils';
-import { Star, Users } from 'lucide-react';
+import { ThumbsUp, ThumbsDown } from 'lucide-react';
 
 interface CityCardProps {
   city: City;
 }
 
-export default function CityCard({ city }: CityCardProps) {
+function CityCard({ city }: CityCardProps) {
+  const [liked, setLiked] = useState(false);
+  const [disliked, setDisliked] = useState(false);
+  const [likeCount, setLikeCount] = useState(city.likes);
+  const [dislikeCount, setDislikeCount] = useState(city.dislikes);
+
+  const handleLike = () => {
+    if (liked) {
+      setLiked(false);
+      setLikeCount(prev => prev - 1);
+    } else {
+      setLiked(true);
+      setLikeCount(prev => prev + 1);
+      if (disliked) {
+        setDisliked(false);
+        setDislikeCount(prev => prev - 1);
+      }
+    }
+  };
+
+  const handleDislike = () => {
+    if (disliked) {
+      setDisliked(false);
+      setDislikeCount(prev => prev - 1);
+    } else {
+      setDisliked(true);
+      setDislikeCount(prev => prev + 1);
+      if (liked) {
+        setLiked(false);
+        setLikeCount(prev => prev - 1);
+      }
+    }
+  };
+
   return (
     <Card className="overflow-hidden hover-lift">
       <div className="relative h-48">
@@ -49,24 +85,58 @@ export default function CityCard({ city }: CityCardProps) {
             </span>
             <span className="text-sm text-muted-foreground">/월</span>
           </div>
-          <div className="flex items-center gap-1">
-            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-            <span className="text-sm font-semibold">{city.rating}</span>
-            <span className="text-xs text-muted-foreground flex items-center gap-1">
-              <Users className="w-3 h-3" />
-              {city.reviewCount}
-            </span>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleLike}
+              className="flex items-center gap-1 transition-colors hover:opacity-75 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md p-1"
+              aria-label={liked ? `${city.name} 좋아요 취소` : `${city.name} 좋아요`}
+              aria-pressed={liked}
+            >
+              <ThumbsUp
+                className={`w-5 h-5 ${liked ? 'fill-blue-500 text-blue-500' : 'text-gray-400'}`}
+              />
+              <span className={`text-sm font-medium ${liked ? 'text-blue-500' : 'text-gray-600'}`}>
+                {likeCount}
+              </span>
+            </button>
+
+            <button
+              onClick={handleDislike}
+              className="flex items-center gap-1 transition-colors hover:opacity-75 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-md p-1"
+              aria-label={disliked ? `${city.name} 싫어요 취소` : `${city.name} 싫어요`}
+              aria-pressed={disliked}
+            >
+              <ThumbsDown
+                className={`w-5 h-5 ${disliked ? 'fill-red-500 text-red-500' : 'text-gray-400'}`}
+              />
+              <span className={`text-sm font-medium ${disliked ? 'text-red-500' : 'text-gray-600'}`}>
+                {dislikeCount}
+              </span>
+            </button>
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2">
-          {city.tags.slice(0, 3).map((tag) => (
-            <Badge key={tag} variant="outline" className="text-xs">
-              {tag}
-            </Badge>
-          ))}
+        <div className="grid grid-cols-2 gap-2 text-sm">
+          <div>
+            <span className="text-muted-foreground">예산: </span>
+            <span className="font-medium">{city.budget}</span>
+          </div>
+          <div>
+            <span className="text-muted-foreground">지역: </span>
+            <span className="font-medium">{city.region_category}</span>
+          </div>
+          <div>
+            <span className="text-muted-foreground">환경: </span>
+            <span className="font-medium">{city.environment.join(', ')}</span>
+          </div>
+          <div>
+            <span className="text-muted-foreground">계절: </span>
+            <span className="font-medium">{city.best_season.join(', ')}</span>
+          </div>
         </div>
       </CardContent>
     </Card>
   );
 }
+
+export default memo(CityCard);
