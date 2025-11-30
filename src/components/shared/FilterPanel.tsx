@@ -95,12 +95,12 @@ export default function FilterPanel({ onFilterChange }: FilterPanelProps) {
       {/* 예산 필터 */}
       <div className="space-y-2">
         <h4 className="text-sm font-medium text-muted-foreground">예산</h4>
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
           {BUDGET_OPTIONS.map((budget) => (
             <Badge
               key={budget}
               variant={selectedBudget === budget ? 'default' : 'outline'}
-              className="cursor-pointer hover-lift px-4 py-2 text-sm"
+              className="cursor-pointer hover-lift px-4 py-2 text-sm w-full text-center"
               onClick={() => toggleBudget(budget)}
             >
               {budget}
@@ -112,12 +112,12 @@ export default function FilterPanel({ onFilterChange }: FilterPanelProps) {
       {/* 지역 필터 */}
       <div className="space-y-2">
         <h4 className="text-sm font-medium text-muted-foreground">지역</h4>
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
           {REGION_CATEGORIES.map((region) => (
             <Badge
               key={region}
               variant={selectedRegions.includes(region) ? 'default' : 'outline'}
-              className="cursor-pointer hover-lift px-4 py-2 text-sm"
+              className="cursor-pointer hover-lift px-4 py-2 text-sm w-full text-center"
               onClick={() => toggleRegion(region)}
             >
               {region}
@@ -129,12 +129,12 @@ export default function FilterPanel({ onFilterChange }: FilterPanelProps) {
       {/* 환경 필터 */}
       <div className="space-y-2">
         <h4 className="text-sm font-medium text-muted-foreground">환경</h4>
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-2 gap-2">
           {ENVIRONMENT_OPTIONS.map((environment) => (
             <Badge
               key={environment}
               variant={selectedEnvironments.includes(environment) ? 'default' : 'outline'}
-              className="cursor-pointer hover-lift px-4 py-2 text-sm"
+              className="cursor-pointer hover-lift px-4 py-2 text-sm w-full text-center"
               onClick={() => toggleEnvironment(environment)}
             >
               {environment}
@@ -146,12 +146,12 @@ export default function FilterPanel({ onFilterChange }: FilterPanelProps) {
       {/* 계절 필터 */}
       <div className="space-y-2">
         <h4 className="text-sm font-medium text-muted-foreground">최고 계절</h4>
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           {SEASON_OPTIONS.map((season) => (
             <Badge
               key={season}
               variant={selectedSeasons.includes(season) ? 'default' : 'outline'}
-              className="cursor-pointer hover-lift px-4 py-2 text-sm"
+              className="cursor-pointer hover-lift px-4 py-2 text-sm w-full text-center"
               onClick={() => toggleSeason(season)}
             >
               {season}
